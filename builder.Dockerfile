@@ -70,13 +70,12 @@ RUN update-alternatives \
     --slave   /usr/bin/clang++               clang++                /usr/bin/clang++-15 \
     --slave   /usr/bin/clang-cpp             clang-cpp              /usr/bin/clang-cpp-15
 
-COPY Makefile /
 COPY fuzzer/aflpp.diff /aflpp.diff
 RUN /bin/git clone --depth 1 -b v4.10c https://github.com/AFLplusplus/AFLplusplus.git /AFLplusplus && \
 	/bin/git clone --depth 1 https://github.com/shioya-lab-public/AceCov.git /AFLplusplus/acecov && \
 	/bin/git -C /AFLplusplus apply /AFLplusplus/acecov/aflpp.diff && \
 	/bin/sed -i s@'#define MAP_SIZE_POW2 16'@'#define MAP_SIZE_POW2 17'@g /AFLplusplus/include/config.h
-
+COPY acecov.env /AFLplusplus/acecov/.env
 RUN unset CFLAGS CXXFLAGS && \
     export EMBED_INFO_BASE=/out/embed CC=/usr/bin/clang-15 CXX=/usr/bin/clang++-15 LLVM_CONFIG=/usr/bin/llvm-config-15 AFL_NO_X86=1 && \
     cd /AFLplusplus && PYTHON_INCLUDE=/ make && \
