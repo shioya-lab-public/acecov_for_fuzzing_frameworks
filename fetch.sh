@@ -10,7 +10,7 @@ git clone --depth 1 -b v4.10c https://github.com/AFLplusplus/AFLplusplus.git $FU
 git clone --depth 1 https://github.com/shioya-lab-public/AceCov.git $FUZZER/repo/acecov
 git -C $FUZZER/repo apply $FUZZER/repo/acecov/aflpp.diff
 sed -i s@'#define MAP_SIZE_POW2 16'@'#define MAP_SIZE_POW2 17'@g $FUZZER/repo/include/config.h
-cp "$FUZZER/acecov.env" "$FUZZER/repo/acecov/.env"
+cp "$FUZZER/acecov.env" "$FUZZER/repo/acecov/analysis/.env"
 
 # Fix: CMake-based build systems fail with duplicate (of main) or undefined references (of LLVMFuzzerTestOneInput)
 sed -i '{s/^int main/__attribute__((weak)) &/}' $FUZZER/repo/utils/aflpp_driver/aflpp_driver.c
